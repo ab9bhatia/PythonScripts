@@ -1,0 +1,1554 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "SyntaxError",
+     "evalue": "Missing parentheses in call to 'print'. Did you mean print('Numpy version:', np.__version__)? (<ipython-input-3-0620e5e6443d>, line 9)",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[1;36m  File \u001b[1;32m\"<ipython-input-3-0620e5e6443d>\"\u001b[1;36m, line \u001b[1;32m9\u001b[0m\n\u001b[1;33m    print 'Numpy version:', np.__version__\u001b[0m\n\u001b[1;37m                         ^\u001b[0m\n\u001b[1;31mSyntaxError\u001b[0m\u001b[1;31m:\u001b[0m Missing parentheses in call to 'print'. Did you mean print('Numpy version:', np.__version__)?\n"
+     ]
+    }
+   ],
+   "source": [
+    "#Import relevant libraries\n",
+    "%matplotlib inline\n",
+    "%config InlineBackend.figure_format = 'retina' #nicer rendering of plots in retina displays\n",
+    "\n",
+    "import sys\n",
+    "print(sys.version)\n",
+    "\n",
+    "import numpy as np\n",
+    "print 'Numpy version:', np.__version__\n",
+    "\n",
+    "import pandas as pd\n",
+    "print 'Pandas version:', pd.__version__\n",
+    "\n",
+    "import matplotlib as mpl\n",
+    "import matplotlib.pyplot as plt\n",
+    "from matplotlib.ticker import FuncFormatter\n",
+    "print 'Matplotlib version:', mpl.__version__\n",
+    "\n",
+    "import plotly.plotly as py\n",
+    "import plotly.graph_objs as go\n",
+    "\n",
+    "import seaborn as sns\n",
+    "sns.set()\n",
+    "pal = sns.hls_palette(10, h=.5)\n",
+    "sns.set_palette(pal)\n",
+    "\n",
+    "import re"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Analyzing the Impact of the Affordable Care Act"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The Affordable Care Act (ACA) is the name for the comprehensive health care reform law and its amendments which addresses health insurance coverage, health care costs, and preventive care. The law was enacted in two parts: The Patient Protection and Affordable Care Act was signed into law on March 23, 2010 by President Barack Obama and was amended by the Health Care and Education Reconciliation Act on March 30, 2010."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "A repeal of the ACA was recently approved by the Congress. This analysis aims to expose metrics to quantify the impact of the ACA."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "%ls Data/"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Load and process dataset with information before the ACA (1995-2010)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Source: https://www.kaggle.com/cdc/health-care-access-coverage\n",
+    "#The health insurance coverage data was compiled from the US Department of Health and Human Services and \n",
+    "#US Census Bureau. It seems to relate to surveys, maybe the American Community Survey? \n",
+    "\n",
+    "pre_ACA = pd.read_csv('Data/HC_access_1995-2010.csv')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "pre_ACA.head(5)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Remove % from string values\n",
+    "pre_ACA['Yes'] = pre_ACA.Yes.apply(lambda x: re.sub('%', '', x))\n",
+    "pre_ACA['No'] = pre_ACA.No.apply(lambda x: re.sub('%', '', x))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Get geolocation\n",
+    "pre_ACA['geolocation'] = pre_ACA['Location 1'].apply(lambda x: x.split('\\n')[1].split(','))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Get latitude from geolocation\n",
+    "pre_ACA['lat'] = pre_ACA.geolocation.apply(lambda x: re.sub('\\(', '', x[0]))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "def get_long(x):\n",
+    "    return re.sub('\\)|\\s', '', x[1]) if len(x)>1 else ''"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Get longitude from geolocation\n",
+    "pre_ACA['long'] = pre_ACA.geolocation.apply(lambda x: get_long(x))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Drop redundant columns\n",
+    "pre_ACA = pre_ACA.drop('geolocation', axis=1)\n",
+    "pre_ACA = pre_ACA.drop('Location 1', axis=1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Convert string datatypes to numeric\n",
+    "for col in ['Yes', 'No', 'lat', 'long']:\n",
+    "    pre_ACA[col] = pd.to_numeric(pre_ACA[col])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "pre_ACA.tail()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "pre_ACA.info()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "len(sorted(pre_ACA.State.unique()))#50 states + DC + PR, Guam, VI + 2 Nationwide values"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "pre_ACA.Year.unique()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "pre_ACA.Condition.unique()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "pre_ACA.Category.unique() #redundant"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#It's not clear how the 2 different categories differ. For this reason, I will work with the category\n",
+    "#'Do you have any kind of health care coverage?' because it's not limited by the age group between 18 and 64.\n",
+    "pre_ACA[pre_ACA.Condition == 'Do you have any kind of health care coverage?'][['Yes', 'No']].describe()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Print stats for comparison.\n",
+    "pre_ACA[pre_ACA.Condition != 'Do you have any kind of health care coverage?'][['Yes', 'No']].describe()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Select a subset of the data\n",
+    "subset = pre_ACA[(pre_ACA.State.str.contains('Nationwide') == False)\\\n",
+    "        & (pre_ACA.Condition == 'Do you have any kind of health care coverage?')] #844 rows"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Drop redundant columns\n",
+    "subset = subset.drop('Category', axis=1)\n",
+    "subset = subset.drop('Condition', axis=1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Load file with state codes\n",
+    "state_codes = pd.read_csv('Data/state_codes.csv')\n",
+    "state_codes = state_codes[['code','state']]\n",
+    "state_codes.columns = ['code', 'State']\n",
+    "state_codes.tail()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Merge state code into dataset\n",
+    "subset= subset.merge(state_codes, how='left', on='State')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Check data\n",
+    "subset[23:38]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Create pivot table with percentage of insured people per state per year\n",
+    "has_insurance = subset.pivot('code','Year','Yes')\n",
+    "has_insurance.head(10)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Define lists with US Census regions\n",
+    "\n",
+    "Northeast = ['Connecticut', 'Maine', 'Massachusetts', 'New Hampshire', 'Rhode Island', 'Vermont', 'Delaware', \n",
+    "             'New Jersey', 'New York', 'Pennsylvania']\n",
+    "\n",
+    "Midwest = ['Illinois', 'Indiana', 'Michigan', 'Ohio', 'Wisconsin', 'Iowa', 'Kansas', 'Minnesota', 'Missouri', \n",
+    "           'Nebraska', 'North Dakota', 'South Dakota']\n",
+    "\n",
+    "South = ['Florida', 'Georgia', 'Maryland', 'North Carolina', 'South Carolina', 'Virginia', 'District of Columbia',\n",
+    "         'West Virginia', 'Alabama', 'Kentucky', 'Mississippi', 'Tennessee', 'Arkansas', 'Louisiana', \n",
+    "         'Oklahoma', 'Texas']\n",
+    "\n",
+    "West = ['Arizona', 'Colorado', 'Idaho', 'Montana', 'Nevada', 'New Mexico', 'Utah', 'Wyoming', 'Alaska', \n",
+    "        'California', 'Hawaii', 'Oregon', 'Washington']\n",
+    "\n",
+    "Territories = ['Puerto Rico', 'Guam', 'Virgin Islands']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Create series with grouped data per region\n",
+    "northeast = subset[subset.State.isin(Northeast)].groupby(['Year']).Yes.mean()\n",
+    "midwest = subset[subset.State.isin(Midwest)].groupby(['Year']).Yes.mean()\n",
+    "south = subset[subset.State.isin(South)].groupby(['Year']).Yes.mean()\n",
+    "west = subset[subset.State.isin(West)].groupby(['Year']).Yes.mean()\n",
+    "territories = subset[subset.State.isin(Territories)].groupby(['Year']).Yes.mean()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Fig1: Visualize the estimated percentage average of insured people per region before ACA"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Create plot with percentage of people who have answered to have some form of insurance (mean per US census region)\n",
+    "\n",
+    "fig, ax = plt.subplots(1,1, figsize=(16, 6))\n",
+    "\n",
+    "northeast.plot(label='Northeast', marker='o')\n",
+    "midwest.plot(label='Midwest', marker='D')\n",
+    "south.plot(label='South', marker='o')\n",
+    "west.plot(label='West', marker='D')\n",
+    "territories.plot(label='Territories', marker='s')\n",
+    "\n",
+    "ax.set_facecolor('#F9F9F9')\n",
+    "ax.grid(color='#E4E4E4', linestyle='dotted', linewidth=1, axis ='y')\n",
+    "\n",
+    "plt.ylim(75, 100)\n",
+    "plt.title('Percentage of People Insured Over the Years', fontsize=16, color='navy')\n",
+    "plt.xlabel('')\n",
+    "plt.tick_params(labelsize=12)\n",
+    "plt.legend(loc='upper right');"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Load and process dataset with information after the ACA (1995-2010)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Source: https://www.kaggle.com/hhs/health-insurance\n",
+    "post_ACA = pd.read_csv('Data/HC_access_afterACA.csv')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "post_ACA.tail()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "cols = ['Uninsured Rate (2010)', 'Uninsured Rate (2015)','Uninsured Rate Change (2010-2015)'] #% values"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Remove % from string values\n",
+    "for col in cols:\n",
+    "    post_ACA[col] = post_ACA[col].apply(lambda x: re.sub('%', '', x))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Remove $ from string values\n",
+    "post_ACA['Average Monthly Tax Credit (2016)'] = \\\n",
+    "post_ACA['Average Monthly Tax Credit (2016)'].apply(lambda x: x[1:-1])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Convert string datatypes to numeric\n",
+    "for col in cols:\n",
+    "    post_ACA[col] = pd.to_numeric(post_ACA[col])\n",
+    "    \n",
+    "post_ACA['Average Monthly Tax Credit (2016)'] = pd.to_numeric(post_ACA['Average Monthly Tax Credit (2016)'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Remove trailing whitespace from state names\n",
+    "post_ACA.State = post_ACA.State.apply(lambda x: x.rstrip())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "post_ACA.info()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "post_ACA.tail()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "len(sorted(post_ACA.State.unique())) #50 states + DC + United States"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Merge state code into dataset\n",
+    "post_ACA = post_ACA.merge(state_codes, how='left', on='State')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Create column with the total insured population per state. Assign code for United States.\n",
+    "post_ACA.loc[51:,('code')] = 'US'\n",
+    "post_ACA['insured_pop'] = post_ACA.iloc[:,(5,6,11,13)].sum(axis=1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Calculate the proportion of enrollment change per state between 2013 and 2016 from the country's \n",
+    "#total new enrollments for the period.\n",
+    "post_ACA['medicaid_delta'] = (post_ACA['Medicaid Enrollment Change (2013-2016)']/\\\n",
+    "post_ACA['Medicaid Enrollment Change (2013-2016)'][51]) *100"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Explore uninsured population data"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#States with the largest proportion of uninsured population before ACA (2010)\n",
+    "post_ACA.ix[:,:4].sort_values(by='Uninsured Rate (2010)', ascending = False)[:19]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Texas still has the highest rate of uninsured population in the country\n",
+    "post_ACA['Uninsured Rate (2015)'].max()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#All states show a drop in uninsured population. Massachusetts had the lowest change in the country...\n",
+    "#and also the lowest rate of uninsured population before and after ACA. Will California follow with SB 562?\n",
+    "post_ACA[post_ACA['Uninsured Rate (2015)'] < 3]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#States with the largest decreases in uninsured population after ACA (2015): above the naiton average of -6.1% points\n",
+    "uninsured_rate = post_ACA.ix[:,[1,2,3,-3]].sort_values(by='Uninsured Rate Change (2010-2015)')[:17]\\\n",
+    ".sort_values(by='Uninsured Rate (2010)', ascending = False)\n",
+    "uninsured_rate"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Fig2a: Chart showing changes in uninsured population rates before and after ACA"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Create plot\n",
+    "ax = uninsured_rate.ix[:,:2].plot.bar(figsize = (15,7), fontsize=12, rot=0)\n",
+    "ax.set_facecolor('#F9F9F9')\n",
+    "ax.set_xticklabels(uninsured_rate.code)\n",
+    "\n",
+    "plt.ylabel('Uninsured Population (%)', fontsize = 14)\n",
+    "plt.title('States with the Biggest Drops in Uninsured Population', fontsize=19, color='navy');"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Fig2b: Interactive chart "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Equivalent interactive version\n",
+    "#(0,120,171) - big sky blue; (64, 224, 208) - turquoise blue\n",
+    "\n",
+    "trace2010 = go.Bar(\n",
+    "    x=uninsured_rate['code'],\n",
+    "    y=uninsured_rate['Uninsured Rate (2010)'],\n",
+    "    name='2010 - Uninsured Rate',\n",
+    "    marker=dict(\n",
+    "        color='rgb(64, 224, 208)'\n",
+    "    )\n",
+    ")\n",
+    "trace2015 = go.Bar(\n",
+    "    x=uninsured_rate['code'],\n",
+    "    y=uninsured_rate['Uninsured Rate (2015)'],\n",
+    "    name='2015 - Uninsured Rate',\n",
+    "    marker=dict(\n",
+    "        color='rgb(0, 120, 171)'\n",
+    "    )\n",
+    ")\n",
+    "data = [trace2010, trace2015]\n",
+    "layout = go.Layout(\n",
+    "    title='States with the Biggest Drops in Uninsured Population',\n",
+    "    xaxis=dict(\n",
+    "        tickfont=dict(\n",
+    "            size=14,\n",
+    "            color='rgb(107, 107, 107)'\n",
+    "        )\n",
+    "    ),\n",
+    "    yaxis=dict(\n",
+    "        title='Uninsured Population (%)',\n",
+    "        titlefont=dict(\n",
+    "            size=16,\n",
+    "            color='rgb(107, 107, 107)'\n",
+    "        ),\n",
+    "        tickfont=dict(\n",
+    "            size=14,\n",
+    "            color='rgb(107, 107, 107)'\n",
+    "        )\n",
+    "    ),\n",
+    "    legend=dict(\n",
+    "        bgcolor='rgba(255, 255, 255, 0)',\n",
+    "        bordercolor='rgba(255, 255, 255, 0)'\n",
+    "    ),\n",
+    "    barmode='group',\n",
+    "    bargap=0.15,\n",
+    "    bargroupgap=0.1\n",
+    ")\n",
+    "\n",
+    "fig = go.Figure(data=data, layout=layout)\n",
+    "py.iplot(fig, filename='uninsured-pop-drop')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Explore data about sources of insurance"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#List dataset columns with insured population breakdown by source of insurance\n",
+    "cols = [u'code', u'Employer Health Insurance Coverage (2015)',\n",
+    "       u'Marketplace Health Insurance Coverage (2016)',\n",
+    "       u'Medicaid Enrollment (2016)', u'Medicare Enrollment (2016)',\n",
+    "       u'insured_pop']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Select data with enrollment per source of insurance. \n",
+    "insurance_type = post_ACA.ix[:,(cols)]\n",
+    "\n",
+    "#Calculate total insured population and share of government coverage for each state.\n",
+    "insurance_type['single_payer'] = insurance_type.ix[:,(3,4)].sum(1)/insurance_type.ix[:,('insured_pop')]\n",
+    "insurance_type['market'] = 1- insurance_type.single_payer\n",
+    "\n",
+    "#Breakdown for each source of insurance.\n",
+    "insurance_type['prop_employer'] = \\\n",
+    "insurance_type['Employer Health Insurance Coverage (2015)']/insurance_type.insured_pop\n",
+    "\n",
+    "insurance_type['prop_marketplace'] = \\\n",
+    "insurance_type['Marketplace Health Insurance Coverage (2016)']/insurance_type.insured_pop\n",
+    "\n",
+    "insurance_type['prop_medicaid'] = insurance_type['Medicaid Enrollment (2016)']/insurance_type.insured_pop\n",
+    "insurance_type['prop_medicare'] = insurance_type['Medicare Enrollment (2016)']/insurance_type.insured_pop\n",
+    "\n",
+    "\n",
+    "insurance_type.tail()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "insurance_type.info()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Print stats for US:\n",
+    "insurance_type.iloc[:-1].single_payer.describe() #mean = ~ 41%"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#States where the government already covers more than 50% of the insured population\n",
+    "insurance_type[insurance_type.single_payer >= 0.50]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#State where the government represents the lowest propertion of insurance source\n",
+    "insurance_type[insurance_type.single_payer < 0.25]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Fig3a: Chart showing states where the government covers > 40% of the population"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Create plot. National mean = 41% of the population covered by Medicaid or Medicare (26 states above mean).\n",
+    "ax = insurance_type[insurance_type.single_payer > .4].single_payer.sort_values(ascending=False).\\\n",
+    "plot.bar(figsize=(16,6), fontsize=11, rot=0)\n",
+    "\n",
+    "labels = insurance_type.sort_values(by='single_payer', ascending=False)['code']\n",
+    "ax.set_xticklabels(labels)\n",
+    "ax.set_facecolor('#F9F9F9')\n",
+    "ax.grid(color='#E4E4E4', linestyle='dotted', linewidth=1, axis ='y')\n",
+    "\n",
+    "plt.text(21, .52, '32 states (Medicaid & Medicare)', color='orange', size= 16, weight ='bold')\n",
+    "plt.ylim(.2,.6)\n",
+    "plt.title('States where > 40% of the Population is Insured by the Government (2016)', fontsize=19, color='navy');"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Fig3b: Chart showing the proportion of government insurance coverage per state"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Scale size of insured population to be used as bubble dimension\n",
+    "\n",
+    "#color= ['hsl('+str(h)+',50%'+',50%)' for h in np.linspace(0, 360, N)]\n",
+    "size = insurance_type.iloc[:-1, :].insured_pop/500000. #disregard last row which is data for the US\n",
+    "size.min(), size.max()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Bubble chart: proportion of single payer per state (similar to Fig3a but showing all states). Nationwide mean: 41%\n",
+    "#The bubble size is proportional to the total insured population in each state.\n",
+    "\n",
+    "trace = go.Scatter (x = insurance_type.iloc[:-1, :].code, \n",
+    "                    y = insurance_type.iloc[:-1, :].single_payer,\n",
+    "                    text = 'Proportion of Medicare + Medicaid',\n",
+    "                    marker = dict(size = size, \n",
+    "                                  color=range(len(insurance_type)-1), \n",
+    "                                  opacity= 0.7, \n",
+    "                                  colorscale='Viridis'), \n",
+    "                    mode = 'markers')\n",
+    "\n",
+    "\n",
+    "layout = dict(\n",
+    "    title = 'Proportion of Insured Population Covered by the Government<br>(bubble size is proportional to population)',\n",
+    "    xaxis=dict(tickangle=-90)\n",
+    ")\n",
+    "\n",
+    "\n",
+    "data=[trace]\n",
+    "fig = dict(data=data, layout=layout)\n",
+    "py.iplot(fig, filename='proportion-single-payer')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Fig4a: Chart with breakdown of source of coverage for top 10 states by insured population"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Select top 10 states by insured population\n",
+    "top10_pop = insurance_type.sort_values(by='insured_pop', ascending=False).head(11)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Create function to format tick values\n",
+    "def millions_format(x, pos):\n",
+    "    \"\"\"\n",
+    "    Args are the value and tick position. \n",
+    "    Returns number of millions with one decimal, and M in lieu of 6 zeros.\n",
+    "    \"\"\"\n",
+    "    return '{:.0f}{}'.format(x * 1e-6, 'M') "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Create plot (data is mostly for 2016, see legend)\n",
+    "ax = top10_pop.iloc[1:,(1,3,4,2)].plot.bar(stacked=True,figsize=(16,6), fontsize=11, rot=0)\n",
+    "\n",
+    "formatter = FuncFormatter(millions_format)\n",
+    "ax.yaxis.set_major_formatter(formatter)\n",
+    "\n",
+    "top10 = ['CA', 'TX', 'NY', 'FL', 'PA', 'IL', 'OH', 'MI', 'NC', 'GA']\n",
+    "ax.set_xticklabels(top10)\n",
+    "\n",
+    "ax.set_facecolor('#F9F9F9')\n",
+    "\n",
+    "plt.title('Source of Coverage Breakdown for the Top 10 States by Insured Population', fontsize=19, color='navy');"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Fig4b: Interactive version of stacked bar chart above to aid visualization"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "top10_pop"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Create plot. Note: there is a daily limit to the number of Plotly's API calls. An error will be raised beyond limit.\n",
+    "#Color palette source: http://colrd.com/palette/27656/ \n",
+    "#Baseline: #55% employer, 23.5% medicaid, 3.5% marketplace, 18% medicare\n",
+    "\n",
+    "data = [\n",
+    "    go.Bar(\n",
+    "        x=top10,\n",
+    "        y=top10_pop.iloc[1:,1],\n",
+    "        name = 'Employer',\n",
+    "        text = top10_pop.prop_employer.iloc[1:].apply(lambda x: '{:,.0f}'.format(x*100)) + '%',\n",
+    "        marker=dict(\n",
+    "        color='rgb(161,173,167)'\n",
+    "        ),\n",
+    "    ),\n",
+    "    go.Bar(\n",
+    "        x=top10,\n",
+    "        y=top10_pop.iloc[1:,3],\n",
+    "        name = 'Medicaid',\n",
+    "        text = top10_pop.prop_medicaid.iloc[1:].apply(lambda x: '{:,.0f}'.format(x*100)) + '%',\n",
+    "        marker=dict(\n",
+    "        color='rgb(62,152,195)'\n",
+    "        ),\n",
+    "    ),\n",
+    "    go.Bar(\n",
+    "        x=top10,\n",
+    "        y=top10_pop.iloc[1:,4],\n",
+    "        name = 'Medicare',\n",
+    "        text = top10_pop.prop_medicare.iloc[1:].apply(lambda x: '{:,.0f}'.format(x*100)) + '%',\n",
+    "        marker=dict(\n",
+    "        color='rgb(13,96,136)'\n",
+    "        ),\n",
+    "    ),\n",
+    "    go.Bar(\n",
+    "        x=top10,\n",
+    "        y=top10_pop.iloc[1:,2],\n",
+    "        name = 'Marketplace',\n",
+    "        text = top10_pop.prop_marketplace.iloc[1:].apply(lambda x: '{:,.1f}'.format(x*100)) + '%',\n",
+    "        marker=dict(\n",
+    "        color='rgb(108,195,9)'\n",
+    "        ),\n",
+    "    )\n",
+    "\n",
+    "]\n",
+    "\n",
+    "layout = go.Layout(\n",
+    "    barmode='stack',\n",
+    "    title='Source of Coverage Breakdown for the Top 10 States by Insured Population'\n",
+    ")\n",
+    "\n",
+    "fig = go.Figure(data=data, layout=layout)\n",
+    "py.iplot(fig, filename='insurance-source-breakdown')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Explore Medicare data"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Select Medicare data\n",
+    "medicare = insurance_type[['code', 'Medicare Enrollment (2016)', 'insured_pop']]\\\n",
+    ".sort_values(by='Medicare Enrollment (2016)', ascending=False).iloc[1:,:]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Get top 10 states by number of Medicare enrollees\n",
+    "medicare_top10 = medicare.head(10).copy()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Estimated total population 65 years or older per state in 2015 (source: US Census website)\n",
+    "pop_65 = pd.Series([5188754, 3942468, 3225168, 2964315, 2179788, 1842952, 1830277, 1570671, 1516824, 1304924], \n",
+    "                  index= medicare_top10.index)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Load total population for top 10 states (source: US Census website, downloaded as pop_65+_perState.csv)\n",
+    "popTop10 = pd.read_csv('Data/pop_2016.csv')\n",
+    "popTop10.index = medicare_top10.index\n",
+    "popTop10.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Add columns with % of insured population covered by Medicare, population 65 and over, and total population.\n",
+    "medicare_top10.loc[:,'total_pop'] = popTop10.pop_2016\n",
+    "medicare_top10.loc[:,'pop_over_65'] = pop_65\n",
+    "medicare_top10['%Medicare'] = 100*medicare_top10['Medicare Enrollment (2016)']/medicare_top10.total_pop\n",
+    "medicare_top10.loc[:,'perc_over_65'] = 100*medicare_top10.pop_over_65/medicare_top10.total_pop"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#The top 10 states represent 51% of all Medicare enrollees\n",
+    "US_medicare_total = insurance_type['Medicare Enrollment (2016)'][51]\n",
+    "medicare_top10['Medicare Enrollment (2016)'].sum()*1./US_medicare_total"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#States with the largest numbers of individuals insured by Medicare are also the states with the largest \n",
+    "#population aged 65 or older. The top 10 states represent 51% of all Medicare enrollees.\n",
+    "medicare_top10"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Fig5: Chart showing Top 10 Medicare Markets"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Create text to show when hovering over map\n",
+    "medicare_top10['text'] = medicare_top10['code'] + '<br>' +\\\n",
+    "'Total Population over 65: ' + medicare_top10['perc_over_65'].apply(lambda x: '{:,.1f}'.format(x)) + '%'+'<br>' +\\\n",
+    "'Total Population on Medicare: '+ medicare_top10['%Medicare'].apply(lambda x: '{:,.1f}'.format(x)) + '%'"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "medicare_top10.text[4]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Visualize Top 10 Medicare markets (by number of enrollees), by number of population 65 years or older.\n",
+    "\n",
+    "trace0 = go.Bar(\n",
+    "    x=medicare_top10.code,\n",
+    "    y=medicare_top10['Medicare Enrollment (2016)'],\n",
+    "    text=medicare_top10['text'],\n",
+    "    marker=dict(\n",
+    "        color=range(len(medicare_top10.code)),\n",
+    "        colorscale='Viridis'\n",
+    "    ),\n",
+    "    opacity=0.7\n",
+    ")\n",
+    "\n",
+    "data = [trace0]\n",
+    "layout = go.Layout(\n",
+    "    title='Top 10 Medicare Markets by Number of Enrollees (2016)',\n",
+    ")\n",
+    "\n",
+    "fig = go.Figure(data=data, layout=layout)\n",
+    "py.iplot(fig, filename='top10-medicare-markets')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Explore Medicaid data"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Check states with the largest proportion (> 2.5%) of additional Medicaid enrollees between 2013 and 2016.\n",
+    "post_ACA[post_ACA['medicaid_delta'] >2.5][['medicaid_delta', 'code', 'State Medicaid Expansion (2016)']].\\\n",
+    "sort_values(by='medicaid_delta', ascending=False)[1:]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#These 3 states actually had a decrease in the number of enrollments in Medicaid.\n",
+    "post_ACA[post_ACA['Medicaid Enrollment Change (2013-2016)'] < 0]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Fig6: Map showing Medicaid enrollment changes throughout the country"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Create a color scale\n",
+    "#palette source: http://colrd.com/palette/19057/\n",
+    "scl3 = [[0.0, 'rgb(255,255,217)'],[0.25, 'rgb(237,248,177)'],[.5, 'rgb(127,205,187)'], [1.0, 'rgb(12,44,132)']]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Create text to show when hovering over map\n",
+    "post_ACA['text'] = post_ACA['State'] + '<br>' +\\\n",
+    "'Expanded Medicaid: ' + post_ACA['State Medicaid Expansion (2016)'].astype(str) + '<br>' +\\\n",
+    "'Medicaid Enrollment in 2016: '+ post_ACA['Medicaid Enrollment (2016)'].apply(lambda x: '{:,.0f}'.format(x)) + '<br>'+\\\n",
+    "'Enrollment Change from 2013: '+ post_ACA['Medicaid Enrollment Change (2013-2016)'].apply(lambda x: '{:,.0f}'.format(x))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Check text string\n",
+    "post_ACA['text'][0]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Apply log to the color scale so that there is more contrast\n",
+    "z = post_ACA.medicaid_delta.apply(lambda x: np.log(x))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Create the choropleth using Plotly Python API.\n",
+    "\n",
+    "data = [dict(\n",
+    "        type='choropleth',\n",
+    "        colorscale = scl3,\n",
+    "        autocolorscale = False,\n",
+    "    showscale = False,\n",
+    "        locations = post_ACA['code'],\n",
+    "        z = z,\n",
+    "        locationmode = 'USA-states',\n",
+    "    hoverinfo = 'text',\n",
+    "        text = post_ACA['text'],\n",
+    "        marker = dict(\n",
+    "            line = dict(\n",
+    "                color = 'rgb(255,255,255)',\n",
+    "                width = 1.5\n",
+    "            )),\n",
+    "        #colorbar = dict(\n",
+    "        #    title = \"% of New Medicaid Enrollees from 2013\")\n",
+    "        )]\n",
+    "\n",
+    "layout = dict(\n",
+    "        title = 'Change in Medicaid Enrollment by State between 2013 and 2016<br>(hover for actual numbers)',\n",
+    "        geo = dict(\n",
+    "            scope='usa',\n",
+    "            projection=dict(type='albers usa'),\n",
+    "            showlakes = True,\n",
+    "            lakecolor = 'rgb(255, 255, 255)'),\n",
+    "             )\n",
+    "    \n",
+    "fig = dict(data=data, layout=layout)\n",
+    "py.iplot(fig, filename='medicaid-cloropleth-USA')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": true
+   },
+   "source": [
+    "## Fig7: Closing the Gap: Health Insurance Coverage Before and After the ACA"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "subset.head(3) #review historic data (pre-ACA)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Create list with (year, % uninsured population) tuples for every 5 years\n",
+    "uninsured = []\n",
+    "years = [1995, 2000, 2005]\n",
+    "\n",
+    "for y in years:\n",
+    "    uninsured.append((y, subset[subset.Year==y].No.mean()))\n",
+    "    \n",
+    "uninsured.append((2010, post_ACA['Uninsured Rate (2010)'][51]))\n",
+    "uninsured.append((2015, post_ACA['Uninsured Rate (2015)'][51]))\n",
+    "\n",
+    "dict(uninsured)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Create summary dataframe containing data about population and GDP for each year.\n",
+    "#Source of population estimates: US Census Bureau via http://www.multpl.com/united-states-population/table\n",
+    "\n",
+    "gdp_per_capita = [38.01, 44.63, 47.96, 47.86, 51.22] #chained to 2009 dollars (inflation adjusted)\n",
+    "pop_millions = [266.28, 282.16, 295.52, 308.11, 319.7]\n",
+    "\n",
+    "summary_df = pd.DataFrame(uninsured, columns = ['year', 'uninsured_%'])\n",
+    "summary_df['gdp_thousands_$'] = pd.Series(gdp_per_capita)\n",
+    "summary_df['pop_millions'] = pd.Series(pop_millions)\n",
+    "summary_df['pop_insured'] = ((100 - summary_df['uninsured_%'])/100.0)* summary_df.pop_millions\n",
+    "\n",
+    "summary_df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Define function to automatically add annotated labels on bar plots.\n",
+    "\n",
+    "def annotate_labels(ax, labels_list, **kwargs):\n",
+    "    \"\"\"\n",
+    "    Function to automatically add labels on bar charts.\n",
+    "    It takes a plot axis, an ordered list of labels, and text kwargs.\n",
+    "    \"\"\"\n",
+    "    \n",
+    "    # Get y-axis height to calculate label position from.\n",
+    "    (y_bottom, y_top) = ax.get_ylim()\n",
+    "    y_height = y_top - y_bottom\n",
+    "    \n",
+    "    rects = ax.patches\n",
+    "\n",
+    "    for rect, label in zip(rects, labels_list):\n",
+    "        height = rect.get_height()\n",
+    "        p_height = (height / y_height) # Fraction of axis height taken up by this rectangle\n",
+    "        label_position = height + (y_height * 0.01)        \n",
+    "        ax.text(rect.get_x() + rect.get_width()/2., label_position, label, kwargs)\n",
+    "    return None"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Define arguments for annotate_labels function to be used to create the plot with data befofe and after the ACA.\n",
+    "labels_list = [str(x) + '%' for x in summary_df['uninsured_%'].values.round(1)]\n",
+    "kwargs = {'fontsize': 13, 'ha':'center', 'va': 'bottom', 'weight': 'bold'}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#Create comparison plot (before and after ACA (2015))\n",
+    "fig, ax = plt.subplots(figsize=(16,6))\n",
+    "\n",
+    "#Bars representing total US population at each year\n",
+    "ax.bar(summary_df.year, summary_df.pop_millions, color='#00E5EE', width=3, \n",
+    "       label='Uninsured Proportion from Total Population')\n",
+    "ax.set_facecolor('#f6f6f6')\n",
+    "ax.tick_params(labelsize=14)\n",
+    "ax.legend(loc='upper left', fontsize=12)\n",
+    "plt.ylim(0,350)\n",
+    "plt.ylabel('Population (Millions)', fontsize=13)\n",
+    "\n",
+    "#Superimposing bars with total insured population in the US\n",
+    "ax2 = ax.twinx()\n",
+    "ax2.bar(summary_df.year, summary_df.pop_insured, color = '#003366', width=2.9)\n",
+    "ax2.get_yaxis().set_ticks([])\n",
+    "annotate_labels(ax2, labels_list, **kwargs)\n",
+    "plt.ylim(0,350);"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The ACA has not only reverted the trending growth in the percentage of uninsured population, but it has also reduced it to the lowest level in at least the last 20 years."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "#turquoise blues: #00C5CD #00CED1 #00E5EE #00FFEF \n",
+    "#dark blue: #003366 \n",
+    "\n",
+    "#rgb(26,48,111)    rgb(194,212,248)    rgb(70,123,208)    rgb(116,193,245)   \n",
+    "#http://colrd.com/palette/22453/ dark to light blues\n",
+    " \n",
+    "#rgb(43,67,79), rgb(99,130,112), rgb(188,201,142), rgb(237,224,89) gray to yellow\n",
+    "#http://colrd.com/palette/21852/"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.6.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
