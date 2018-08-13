@@ -31,8 +31,8 @@
     - utter_greet
 * restaurant_search
     - utter_ask_location
-* restaurant_search{"location": "italy"}
-    - slot{"location": "italy"}
+* restaurant_search{"location": "noida"}
+    - slot{"location": "noida"}
 	- utter_ask_cuisine
 * restaurant_search{"cuisine": "chinese"}
     - slot{"cuisine": "chinese"}

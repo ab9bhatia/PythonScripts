@@ -1,0 +1,6 @@
+1. python train_init
+dialoge management model
+python run_api
+./ngrok http 5004
+copy https url at https://api.slack.com/apps/AC6UDN4P5/event-subscriptions?
+eg https://06cec661.ngrok.io/slack/events
