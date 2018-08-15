@@ -1,5 +1,9 @@
 [
     {
+        "name": "budget",
+        "pattern": "\\d"
+    },
+    {
         "name": "greet",
         "pattern": "hey[^\\s]*"
     },

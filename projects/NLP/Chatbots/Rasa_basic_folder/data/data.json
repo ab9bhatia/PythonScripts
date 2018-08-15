@@ -602,6 +602,8 @@
     "intent": "restaurant_search",
     "entities": [
       {
+		"start": 12,
+        "end": 15,
         "entity": "budget",
         "value": "Lesser than 300"
       }
@@ -612,6 +614,8 @@
     "intent": "restaurant_search",
     "entities": [
       {
+		"start": 0,
+        "end": 10,	  
         "entity": "budget",
         "value": "300 to 700"
       }
@@ -622,18 +626,94 @@
     "intent": "restaurant_search",
     "entities": [
       {
+		"start": 10,
+        "end": 13,	  
         "entity": "budget",
         "value": "More than 700"
       }
     ]
   },
-	{
+  {
+    "text": "Chinese",
+    "intent": "restaurant_search",
+    "entities": [
+      {
+        "entity": "cusine",
+        "value": "Chinese",
+        "start": 0,
+        "end": 8
+      }
+    ]
+  },
+  {
+    "text": "Mexican",
+    "intent": "restaurant_search",
+    "entities": [
+      {
+        "entity": "cusine",
+        "value": "Mexican",
+        "start": 0,
+        "end": 8
+      }
+    ]
+  },
+  {
+    "text": "Italian",
+    "intent": "restaurant_search",
+    "entities": [
+      {
+        "entity": "cusine",
+        "value": "Italian",
+        "start": 0,
+        "end": 8
+      }
+    ]
+  },
+  {
+    "text": "American",
+    "intent": "restaurant_search",
+    "entities": [
+      {
+        "entity": "cusine",
+        "value": "American",
+        "start": 0,
+        "end": 9
+      }
+    ]
+  },
+  {
+    "text": "South Indian",
+    "intent": "restaurant_search",
+    "entities": [
+      {
+        "entity": "cusine",
+        "value": "South Indian",
+        "start": 0,
+        "end": 13
+      }
+    ]
+  },
+  {
+    "text": "North Indian",
+    "intent": "restaurant_search",
+    "entities": [
+      {
+        "entity": "cusine",
+        "value": "North Indian",
+        "start": 0,
+        "end": 13
+      }
+    ]
+  },
+{
     "text": "Ahmedabad",
     "intent": "restaurant_search",
     "entities": [
       {
         "entity": "location",
-        "value": "Ahmedabad"
+        "value": "Ahmedabad",
+        "start": 0,
+        "end": 10
       }
     ]
   },
@@ -643,7 +723,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Bangalore"
+        "value": "Bangalore",
+        "start": 0,
+        "end": 10
       }
     ]
   },
@@ -653,7 +735,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Chennai"
+        "value": "Chennai",
+        "start": 0,
+        "end": 8
       }
     ]
   },
@@ -663,7 +747,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Delhi"
+        "value": "Delhi",
+        "start": 0,
+        "end": 6
       }
     ]
   },
@@ -673,7 +759,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Hyderabad"
+        "value": "Hyderabad",
+        "start": 0,
+        "end": 10
       }
     ]
   },
@@ -683,7 +771,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Kolkata"
+        "value": "Kolkata",
+        "start": 0,
+        "end": 8
       }
     ]
   },
@@ -693,7 +783,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Mumbai"
+        "value": "Mumbai",
+        "start": 0,
+        "end": 7
       }
     ]
   },
@@ -703,7 +795,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Pune"
+        "value": "Pune",
+        "start": 0,
+        "end": 5
       }
     ]
   },
@@ -713,7 +807,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Agra"
+        "value": "Agra",
+        "start": 0,
+        "end": 5
       }
     ]
   },
@@ -723,7 +819,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Ajmer"
+        "value": "Ajmer",
+        "start": 0,
+        "end": 6
       }
     ]
   },
@@ -733,7 +831,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Aligarh"
+        "value": "Aligarh",
+        "start": 0,
+        "end": 8
       }
     ]
   },
@@ -743,7 +843,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Allahabad"
+        "value": "Allahabad",
+        "start": 0,
+        "end": 10
       }
     ]
   },
@@ -753,7 +855,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Amravati"
+        "value": "Amravati",
+        "start": 0,
+        "end": 9
       }
     ]
   },
@@ -763,7 +867,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Amritsar"
+        "value": "Amritsar",
+        "start": 0,
+        "end": 9
       }
     ]
   },
@@ -773,7 +879,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Asansol"
+        "value": "Asansol",
+        "start": 0,
+        "end": 8
       }
     ]
   },
@@ -783,7 +891,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Aurangabad"
+        "value": "Aurangabad",
+        "start": 0,
+        "end": 11
       }
     ]
   },
@@ -793,7 +903,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Bareilly"
+        "value": "Bareilly",
+        "start": 0,
+        "end": 9
       }
     ]
   },
@@ -803,7 +915,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Belgaum"
+        "value": "Belgaum",
+        "start": 0,
+        "end": 8
       }
     ]
   },
@@ -813,7 +927,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Bhavnagar"
+        "value": "Bhavnagar",
+        "start": 0,
+        "end": 10
       }
     ]
   },
@@ -823,7 +939,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Bhiwandi"
+        "value": "Bhiwandi",
+        "start": 0,
+        "end": 9
       }
     ]
   },
@@ -833,7 +951,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Bhopal"
+        "value": "Bhopal",
+        "start": 0,
+        "end": 7
       }
     ]
   },
@@ -843,7 +963,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Bhubaneswar"
+        "value": "Bhubaneswar",
+        "start": 0,
+        "end": 12
       }
     ]
   },
@@ -853,7 +975,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Bikaner"
+        "value": "Bikaner",
+        "start": 0,
+        "end": 8
       }
     ]
   },
@@ -863,7 +987,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "BokaroSteelCity"
+        "value": "BokaroSteelCity",
+        "start": 0,
+        "end": 16
       }
     ]
   },
@@ -873,7 +999,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Chandigarh"
+        "value": "Chandigarh",
+        "start": 0,
+        "end": 11
       }
     ]
   },
@@ -883,7 +1011,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Coimbatore"
+        "value": "Coimbatore",
+        "start": 0,
+        "end": 11
       }
     ]
   },
@@ -893,7 +1023,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Cuttack"
+        "value": "Cuttack",
+        "start": 0,
+        "end": 8
       }
     ]
   },
@@ -903,7 +1035,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Dehradun"
+        "value": "Dehradun",
+        "start": 0,
+        "end": 9
       }
     ]
   },
@@ -913,7 +1047,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Dhanbad"
+        "value": "Dhanbad",
+        "start": 0,
+        "end": 8
       }
     ]
   },
@@ -923,7 +1059,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Durg-BhilaiNagar"
+        "value": "Durg-BhilaiNagar",
+        "start": 0,
+        "end": 17
       }
     ]
   },
@@ -933,7 +1071,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Durgapur"
+        "value": "Durgapur",
+        "start": 0,
+        "end": 9
       }
     ]
   },
@@ -943,7 +1083,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Erode"
+        "value": "Erode",
+        "start": 0,
+        "end": 6
       }
     ]
   },
@@ -953,7 +1095,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Faridabad"
+        "value": "Faridabad",
+        "start": 0,
+        "end": 10
       }
     ]
   },
@@ -963,7 +1107,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Firozabad"
+        "value": "Firozabad",
+        "start": 0,
+        "end": 10
       }
     ]
   },
@@ -973,7 +1119,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Ghaziabad"
+        "value": "Ghaziabad",
+        "start": 0,
+        "end": 10
       }
     ]
   },
@@ -983,7 +1131,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Gorakhpur"
+        "value": "Gorakhpur",
+        "start": 0,
+        "end": 10
       }
     ]
   },
@@ -993,7 +1143,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Gulbarga"
+        "value": "Gulbarga",
+        "start": 0,
+        "end": 9
       }
     ]
   },
@@ -1003,7 +1155,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Guntur"
+        "value": "Guntur",
+        "start": 0,
+        "end": 7
       }
     ]
   },
@@ -1013,7 +1167,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Gurgaon"
+        "value": "Gurgaon",
+        "start": 0,
+        "end": 8
       }
     ]
   },
@@ -1023,7 +1179,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Guwahati\u201aGwalior"
+        "value": "Guwahati\u201aGwalior",
+        "start": 0,
+        "end": 17
       }
     ]
   },
@@ -1033,7 +1191,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Hubli-Dharwad"
+        "value": "Hubli-Dharwad",
+        "start": 0,
+        "end": 14
       }
     ]
   },
@@ -1043,7 +1203,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Indore"
+        "value": "Indore",
+        "start": 0,
+        "end": 7
       }
     ]
   },
@@ -1053,7 +1215,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Jabalpur"
+        "value": "Jabalpur",
+        "start": 0,
+        "end": 9
       }
     ]
   },
@@ -1063,7 +1227,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Jaipur"
+        "value": "Jaipur",
+        "start": 0,
+        "end": 7
       }
     ]
   },
@@ -1073,7 +1239,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Jalandhar"
+        "value": "Jalandhar",
+        "start": 0,
+        "end": 10
       }
     ]
   },
@@ -1083,7 +1251,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Jammu"
+        "value": "Jammu",
+        "start": 0,
+        "end": 6
       }
     ]
   },
@@ -1093,7 +1263,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Jamnagar"
+        "value": "Jamnagar",
+        "start": 0,
+        "end": 9
       }
     ]
   },
@@ -1103,7 +1275,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Jamshedpur"
+        "value": "Jamshedpur",
+        "start": 0,
+        "end": 11
       }
     ]
   },
@@ -1113,7 +1287,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Jhansi"
+        "value": "Jhansi",
+        "start": 0,
+        "end": 7
       }
     ]
   },
@@ -1123,7 +1299,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Jodhpur"
+        "value": "Jodhpur",
+        "start": 0,
+        "end": 8
       }
     ]
   },
@@ -1133,7 +1311,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Kannur"
+        "value": "Kannur",
+        "start": 0,
+        "end": 7
       }
     ]
   },
@@ -1143,7 +1323,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Kanpur"
+        "value": "Kanpur",
+        "start": 0,
+        "end": 7
       }
     ]
   },
@@ -1153,7 +1335,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Kakinada"
+        "value": "Kakinada",
+        "start": 0,
+        "end": 9
       }
     ]
   },
@@ -1163,7 +1347,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Kochi"
+        "value": "Kochi",
+        "start": 0,
+        "end": 6
       }
     ]
   },
@@ -1173,7 +1359,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Kottayam"
+        "value": "Kottayam",
+        "start": 0,
+        "end": 9
       }
     ]
   },
@@ -1183,7 +1371,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Kolhapur"
+        "value": "Kolhapur",
+        "start": 0,
+        "end": 9
       }
     ]
   },
@@ -1193,7 +1383,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Kollam"
+        "value": "Kollam",
+        "start": 0,
+        "end": 7
       }
     ]
   },
@@ -1203,7 +1395,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Kota"
+        "value": "Kota",
+        "start": 0,
+        "end": 5
       }
     ]
   },
@@ -1213,7 +1407,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Kozhikode"
+        "value": "Kozhikode",
+        "start": 0,
+        "end": 10
       }
     ]
   },
@@ -1223,7 +1419,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Kurnool"
+        "value": "Kurnool",
+        "start": 0,
+        "end": 8
       }
     ]
   },
@@ -1233,7 +1431,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Lucknow"
+        "value": "Lucknow",
+        "start": 0,
+        "end": 8
       }
     ]
   },
@@ -1243,7 +1443,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Ludhiana"
+        "value": "Ludhiana",
+        "start": 0,
+        "end": 9
       }
     ]
   },
@@ -1253,7 +1455,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Madurai"
+        "value": "Madurai",
+        "start": 0,
+        "end": 8
       }
     ]
   },
@@ -1263,7 +1467,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Malappuram"
+        "value": "Malappuram",
+        "start": 0,
+        "end": 11
       }
     ]
   },
@@ -1273,7 +1479,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Mathura"
+        "value": "Mathura",
+        "start": 0,
+        "end": 8
       }
     ]
   },
@@ -1283,7 +1491,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Goa"
+        "value": "Goa",
+        "start": 0,
+        "end": 4
       }
     ]
   },
@@ -1293,7 +1503,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Mangalore"
+        "value": "Mangalore",
+        "start": 0,
+        "end": 10
       }
     ]
   },
@@ -1303,7 +1515,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Meerut"
+        "value": "Meerut",
+        "start": 0,
+        "end": 7
       }
     ]
   },
@@ -1313,7 +1527,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Moradabad"
+        "value": "Moradabad",
+        "start": 0,
+        "end": 10
       }
     ]
   },
@@ -1323,7 +1539,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Mysore"
+        "value": "Mysore",
+        "start": 0,
+        "end": 7
       }
     ]
   },
@@ -1333,7 +1551,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Nagpur"
+        "value": "Nagpur",
+        "start": 0,
+        "end": 7
       }
     ]
   },
@@ -1343,7 +1563,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Nanded"
+        "value": "Nanded",
+        "start": 0,
+        "end": 7
       }
     ]
   },
@@ -1353,7 +1575,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Nashik"
+        "value": "Nashik",
+        "start": 0,
+        "end": 7
       }
     ]
   },
@@ -1363,7 +1587,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Nellore"
+        "value": "Nellore",
+        "start": 0,
+        "end": 8
       }
     ]
   },
@@ -1373,7 +1599,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Noida"
+        "value": "Noida",
+        "start": 0,
+        "end": 6
       }
     ]
   },
@@ -1383,7 +1611,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Palakkad"
+        "value": "Palakkad",
+        "start": 0,
+        "end": 9
       }
     ]
   },
@@ -1393,7 +1623,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Patna"
+        "value": "Patna",
+        "start": 0,
+        "end": 6
       }
     ]
   },
@@ -1403,7 +1635,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Pondicherry"
+        "value": "Pondicherry",
+        "start": 0,
+        "end": 12
       }
     ]
   },
@@ -1413,7 +1647,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Raipur"
+        "value": "Raipur",
+        "start": 0,
+        "end": 7
       }
     ]
   },
@@ -1423,7 +1659,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Rajkot"
+        "value": "Rajkot",
+        "start": 0,
+        "end": 7
       }
     ]
   },
@@ -1433,7 +1671,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Rajahmundry"
+        "value": "Rajahmundry",
+        "start": 0,
+        "end": 12
       }
     ]
   },
@@ -1443,7 +1683,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Ranchi"
+        "value": "Ranchi",
+        "start": 0,
+        "end": 7
       }
     ]
   },
@@ -1453,7 +1695,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Rourkela"
+        "value": "Rourkela",
+        "start": 0,
+        "end": 9
       }
     ]
   },
@@ -1463,7 +1707,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Salem"
+        "value": "Salem",
+        "start": 0,
+        "end": 6
       }
     ]
   },
@@ -1473,7 +1719,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Sangli"
+        "value": "Sangli",
+        "start": 0,
+        "end": 7
       }
     ]
   },
@@ -1483,7 +1731,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Siliguri"
+        "value": "Siliguri",
+        "start": 0,
+        "end": 9
       }
     ]
   },
@@ -1493,7 +1743,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Solapur"
+        "value": "Solapur",
+        "start": 0,
+        "end": 8
       }
     ]
   },
@@ -1503,7 +1755,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Srinagar"
+        "value": "Srinagar",
+        "start": 0,
+        "end": 9
       }
     ]
   },
@@ -1513,7 +1767,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Sultanpur"
+        "value": "Sultanpur",
+        "start": 0,
+        "end": 10
       }
     ]
   },
@@ -1523,7 +1779,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Surat"
+        "value": "Surat",
+        "start": 0,
+        "end": 6
       }
     ]
   },
@@ -1533,7 +1791,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Thiruvananthapuram"
+        "value": "Thiruvananthapuram",
+        "start": 0,
+        "end": 19
       }
     ]
   },
@@ -1543,7 +1803,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Thrissur"
+        "value": "Thrissur",
+        "start": 0,
+        "end": 9
       }
     ]
   },
@@ -1553,7 +1815,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Tiruchirappalli"
+        "value": "Tiruchirappalli",
+        "start": 0,
+        "end": 16
       }
     ]
   },
@@ -1563,7 +1827,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Tirunelveli"
+        "value": "Tirunelveli",
+        "start": 0,
+        "end": 12
       }
     ]
   },
@@ -1573,7 +1839,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Tiruppur"
+        "value": "Tiruppur",
+        "start": 0,
+        "end": 9
       }
     ]
   },
@@ -1583,7 +1851,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Ujjain"
+        "value": "Ujjain",
+        "start": 0,
+        "end": 7
       }
     ]
   },
@@ -1593,7 +1863,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Vijayapura"
+        "value": "Vijayapura",
+        "start": 0,
+        "end": 11
       }
     ]
   },
@@ -1603,7 +1875,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Vadodara"
+        "value": "Vadodara",
+        "start": 0,
+        "end": 9
       }
     ]
   },
@@ -1613,7 +1887,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Varanasi"
+        "value": "Varanasi",
+        "start": 0,
+        "end": 9
       }
     ]
   },
@@ -1623,7 +1899,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Vasai-VirarCity"
+        "value": "Vasai-VirarCity",
+        "start": 0,
+        "end": 16
       }
     ]
   },
@@ -1633,7 +1911,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Vijayawada"
+        "value": "Vijayawada",
+        "start": 0,
+        "end": 11
       }
     ]
   },
@@ -1643,7 +1923,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Visakhapatnam"
+        "value": "Visakhapatnam",
+        "start": 0,
+        "end": 14
       }
     ]
   },
@@ -1653,7 +1935,9 @@
     "entities": [
       {
         "entity": "location",
-        "value": "Warangal"
+        "value": "Warangal",
+        "start": 0,
+        "end": 9
       }
     ]
   },	  
