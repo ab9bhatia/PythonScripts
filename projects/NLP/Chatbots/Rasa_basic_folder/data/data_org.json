@@ -8,10 +8,6 @@
       {
         "name": "greet",
         "pattern": "hey[^\\s]*"
-      },
-      {
-        "name": "budget",
-        "pattern": "\\d" 
       }
     ],
     "entity_synonyms": [
@@ -31,7 +27,6 @@
         ]
       }
     ],
-
     "common_examples": [
       {
         "text": "hey",
@@ -536,67 +531,8 @@
         "intent": "goodbye",
         "entities": []
       },
-      {
-        "text": "please help me to find restaurants in pune",
-        "intent": "restaurant_search",
-        "entities": [
-          {
-            "start": 38,
-            "end": 42,
-            "value": "pune",
-            "entity": "location"
-          }
-        ]
-      },
-
-      {
-        "text": "More than 800",
-        "intent": "restaurant_search",
-        "entities": [
-          {
-            "start": 10,
-            "end": 12,
-            "value": "800",
-            "entity": "budget"
-          }
-        ]
-      },
-      {
-        "text": "less than 500",
-        "intent": "restaurant_search",
-        "entities": [
-          {
-            "start": 10,
-            "end": 13,
-            "value": "500",
-            "entity": "budget"
-          }
-        ]
-      },
-      {
-        "text": "<300",
-        "intent": "restaurant_search",
-        "entities": [
-          {
-            "start": 1,
-            "end": 4,
-            "value": "300",
-            "entity": "budget"
-          }
-        ]
-      },
-      {
-        "text": "300-700 range",
-        "intent": "restaurant_search",
-        "entities": [
-          {
-            "start": 0,
-            "end": 7,
-            "value": "300-700",
-            "entity": "budget"
-          }
-        ]
-      },
+	  
+	  
 		{
     "text": "Lesser than 300",
     "intent": "restaurant_search",
@@ -1656,20 +1592,19 @@
         "value": "Warangal"
       }
     ]
-  },	  
+  },
       {
-        "text": ">700",
+        "text": "please help me to find restaurants in pune",
         "intent": "restaurant_search",
         "entities": [
           {
-            "start": 1,
-            "end": 4,
-            "value": "700",
-            "entity": "budget"
+            "start": 38,
+            "end": 42,
+            "value": "pune",
+            "entity": "location"
           }
         ]
       }
-
     ]
   }
 }

@@ -21,7 +21,7 @@ if __name__ == '__main__':
 	agent.train(
 			training_data_file,
 			augmentation_factor = 50,
-			max_history = 4,
+			#max_history = 4,
 			epochs = 500,
 			batch_size = 30,
 			validation_split = 0.2)

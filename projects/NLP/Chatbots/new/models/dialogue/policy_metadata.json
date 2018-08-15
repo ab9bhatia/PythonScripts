@@ -3,22 +3,22 @@
     "action_listen": {
       "slots": [
         "budget",
-        "cuisine",
-        "location"
+        "location",
+        "cuisine"
       ]
+    },
+    "utter_goodbye": {
+      "slots": []
     },
     "action_restaurant": {
       "slots": [
         "location"
       ]
-    },
-    "utter_goodbye": {
-      "slots": []
     }
   },
   "rasa_core": "0.10.3",
   "max_histories": [
-    5,
+    4,
     5
   ],
   "ensemble_name": "rasa_core.policies.ensemble.SimplePolicyEnsemble",

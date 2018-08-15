@@ -13,13 +13,13 @@ class ActionSearchRestaurants(Action):
 		return 'action_restaurant'
 		
 	def run(self, dispatcher, tracker, domain):
-		config={ "user_key":"78c87a6483c0723fb0743bb4e9ab417d"}
+		config={ "user_key":"b150e50385939f3d2fca77c2cca1e072"}
 		zomato = zomatopy.initialize_app(config)
 		loc = tracker.get_slot('location')
 		cuisine = tracker.get_slot('cuisine')
 		bud= tracker.get_slot('budget')
-		#tmp = next(tracker.get_latest_entity_values('budget'), None)
-		#print (tmp)
+		tmp = next(tracker.get_latest_entity_values('budget'), None)
+		print (tmp)
 		location_detail=zomato.get_location(loc, 1)
 		d1 = json.loads(location_detail)
 		lat=d1["location_suggestions"][0]["latitude"]
