@@ -1,6 +1,17 @@
 1. python train_init
 dialoge management model
-python run_api
+python ./run_app.py
 ./ngrok http 5004
 copy https url at https://api.slack.com/apps/AC6UDN4P5/event-subscriptions?
 eg https://06cec661.ngrok.io/slack/events
+
+
+
+
+
+
+
+
+python .\App_nlu.py
+postman http://127.0.0.1:5000 post 
+body {"utterance":"find me some restaurants in noida"}
