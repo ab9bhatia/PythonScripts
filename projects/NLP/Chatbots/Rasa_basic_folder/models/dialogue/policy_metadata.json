@@ -2,9 +2,9 @@
   "action_fingerprints": {
     "action_listen": {
       "slots": [
-        "location",
         "budget",
-        "cuisine"
+        "cuisine",
+        "location"
       ]
     },
     "action_restaurant": {

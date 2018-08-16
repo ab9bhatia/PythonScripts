@@ -3,22 +3,22 @@
 action_factory: null
 action_names:
 - utter_greet
+- utter_goodbye
 - utter_default
 - utter_ask_howcanhelp
 - utter_ask_location
 - utter_ask_cuisine
 - utter_ask_budget
 - action_restaurant
-- utter_goodbye
 actions:
 - utter_greet
+- utter_goodbye
 - utter_default
 - utter_ask_howcanhelp
 - utter_ask_location
 - utter_ask_cuisine
 - utter_ask_budget
 - actions.ActionSearchRestaurants
-- utter_goodbye
 config:
   store_entities_as_slots: true
 entities:
@@ -36,16 +36,12 @@ intents:
     use_entities: true
 - thankyou:
     use_entities: true
-- inform:
-    use_entities: true
 - restaurant_search:
     use_entities: true
 slots:
   budget:
     initial_value: null
-    max_value: 1.0
-    min_value: 0.0
-    type: rasa_core.slots.FloatSlot
+    type: rasa_core.slots.TextSlot
   cuisine:
     initial_value: null
     type: rasa_core.slots.TextSlot
@@ -55,13 +51,13 @@ slots:
 templates:
   utter_ask_budget:
   - buttons:
-    - payload: /less than 300
-      title: Lesser than Rs. 300
-    - payload: /300 to 700
-      title: Rs. 300 to 700
-    - payload: /700 or more
-      title: More than 700
-    text: What price range are you looking at?
+    - payload: /Lesser than Rs 300
+      title: Lesser than Rs 300
+    - payload: /Rs 300 to 700
+      title: Rs 300 to 700
+    - payload: /Rs 300 to 700
+      title: Rs 700 or more
+    text: what price range are you looking at?
   utter_ask_cuisine:
   - buttons:
     - payload: Chinese
@@ -77,6 +73,8 @@ templates:
   - text: how can I help you?
   utter_ask_location:
   - text: In what location?
+  - text: In which area?
+  - text: Where are you searching for restaurants?
   utter_default:
   - text: default message
   utter_goodbye:
