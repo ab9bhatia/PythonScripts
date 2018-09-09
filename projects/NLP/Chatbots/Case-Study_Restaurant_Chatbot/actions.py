@@ -52,7 +52,6 @@ class ActionSearchRestaurants(Action):
 				lowest = 701
 				highest = max([restaurant['restaurant']['average_cost_for_two'] for restaurant in d['restaurants']])
 		response=[]
-		r = pd.DataFrame(columns=['Restaurant Name','Location','Average Cost for Two'])
 		if d['results_found'] == 0:
 			print('No Results')
 		else:
