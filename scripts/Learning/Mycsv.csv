@@ -1,0 +1,9 @@
+ID@@@Signal
+0@@@HT_CLKIN_P
+1@@@HT_CLKOUT_P
+2@@@LDTPHY013_Inst1.HT_REFCLK
+3@@@clk_PCI1CLK_H
+4@@@clk_ht100_or_200_H
+5@@@clk_pcibr66_H
+6@@@h_extrxclkin
+7@@@h_exttxclkin
